@@ -277,7 +277,6 @@ var Nognog = (function (window, document) {
                 `
             }
         },
-        init,
         podConnect,
         getUserJWTToken,
         getAdminJWTToken,
