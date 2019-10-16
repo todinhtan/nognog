@@ -64,7 +64,7 @@ var Nognog = (function (window, document) {
             payload = {
                 iss: this.config.vendorId,
                 admin: false,
-                exp: KJUR.jws.IntDate.get('now + 1day')
+                exp: KJUR.jws.IntDate.get('now + 1hour')
             };
         var sHeader = JSON.stringify(header),
             sPayload = JSON.stringify(payload);
@@ -78,14 +78,14 @@ var Nognog = (function (window, document) {
         var header = {alg: 'RS256', typ: 'JWT'},
             payload = {
                 iss: this.config.vendorId,
-                admin: false,
-                exp: KJUR.jws.IntDate.get('now + 1day')
+                admin: true,
+                exp: KJUR.jws.IntDate.get('now + 1hour')
             };
         var sHeader = JSON.stringify(header),
             sPayload = JSON.stringify(payload);
         return KJUR.jws.JWS.sign('RS256', sHeader, sPayload, this.config.adminPKI.priv);
     },
-    podConnect = async function(email) {
+    podConnect = async function(signatures) {
         if (!axios) {
             console.error('Could not found axios');
             return null;
@@ -93,9 +93,9 @@ var Nognog = (function (window, document) {
 
         var userToken = this.getUserJWTToken(),
             fingerprint = await getFingerprint();
-        
+
         var response = await axios.post(this.config.podUrl + '/pods/connect', {
-            signatures: { fingerprint, email }
+            signatures: { fingerprint, ...signatures }
         }, {
             headers: { Authorization: `Bearer ${userToken}` }
         }).catch(function(error) {
@@ -105,7 +105,7 @@ var Nognog = (function (window, document) {
         if (response.status === 200 && response.data && response.data.vendorAccessToken) {
             return response.data.vendorAccessToken;
         }
-        
+
         return null;
     },
     /*
@@ -114,12 +114,12 @@ var Nognog = (function (window, document) {
         "action": {
             "actionPredicate":"article1",
             "actionObject":"front_676"
-            
+
         },
         "timestamp":1569983632000
     }
     */
-    postPodActivity = async function(accessToken, activityData) {
+    feedPodActivity = async function(accessToken, activityData) {
         if (!axios) {
             console.error('Could not found axios');
             return false;
@@ -143,7 +143,7 @@ var Nognog = (function (window, document) {
         "requestContentType": ["article","event"]
     }
     */
-    postRecommendations = async function(accessToken, recommendData) {
+    getRecommendations = async function(accessToken, recommendData) {
         if (!axios) {
             console.error('Could not found axios');
             return false;
@@ -155,7 +155,8 @@ var Nognog = (function (window, document) {
             console.log(error);
         });
 
-        return response && response.status === 200;
+        response.status = 200;
+        return response.data;
     },
     /*
     feedbackData = {
@@ -163,12 +164,12 @@ var Nognog = (function (window, document) {
         "action": {
             "actionPredicate":"why",
             "actionObject":"front_676"
-            
+
         },
         "timestamp":1569983632000
     }
     */
-    postRecommendFeedback = async function(accessToken, feedbackData) {
+    feedbackRecommendation = async function(accessToken, feedbackData) {
         if (!axios) {
             console.error('Could not found axios');
             return false;
@@ -206,7 +207,7 @@ var Nognog = (function (window, document) {
         }
 
         var adminToken = this.getAdminJWTToken();
-        var response = await axios.post(this.config.vendorUrl + '/vendors/batches', content, {
+        var response = await axios.post(this.config.vendorUrl + '/batches', content, {
             headers: { Authorization: `Bearer ${adminToken}` }
         }).catch(function(error) {
             console.log(error);
@@ -219,9 +220,11 @@ var Nognog = (function (window, document) {
     init();
     return {
         config: {
-            podUrl: 'https://scs-pods.noggin.space',
-            vendorUrl: 'https://scs-vendors.noggin.space',
-            vendorId: '950238B8D24D',
+            // podUrl: 'https://scs-pods.noggin.space',
+            podUrl: 'http://localhost:7000',
+            // vendorUrl: 'https://scs-vendors.noggin.space',
+            vendorUrl: 'http://localhost:7001',
+            vendorId: '40B0C40C4872',
             adminPKI: {
                 pub: `
                 -----BEGIN PUBLIC KEY-----
@@ -280,9 +283,9 @@ var Nognog = (function (window, document) {
         podConnect,
         getUserJWTToken,
         getAdminJWTToken,
-        postPodActivity,
-        postRecommendations,
-        postRecommendFeedback,
+        feedPodActivity,
+        getRecommendations,
+        feedbackRecommendation,
         uploadIncrementalContent,
     };
 })(window, document);
