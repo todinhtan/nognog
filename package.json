@@ -1,0 +1,27 @@
+{
+  "name": "nognog",
+  "version": "1.0.0",
+  "description": "POD operations\r ```js\r var vendorAccessToken = await Nognog.podConnect(\"hieutran@noggin.asia\");\r var activity = {\r     \"scope\":\"sites.history\",\r     \"action\": {\r         \"actionPredicate\":\"article1\",\r         \"actionObject\":\"front_676\"",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.4",
+    "grunt-contrib-uglify-es": "github:gruntjs/grunt-contrib-uglify#harmony"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/todinhtan/nognog.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/todinhtan/nognog/issues"
+  },
+  "homepage": "https://github.com/todinhtan/nognog#readme"
+}
