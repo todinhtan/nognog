@@ -4,7 +4,10 @@ module.exports = function (grunt) {
         uglify: {
             app: {
                 src: [
-                    'src/nognog.js'
+                    'src/vendor/axios.min.js',
+                    'src/vendor/fingerprint2.min.js',
+                    'src/vendor/jsrsasign-all-min.js',
+                    'src/nognog.js',
                 ],
                 dest: 'src/nognog.min.js'
             }

@@ -34,7 +34,7 @@ var Nognog = (function (window, document) {
         if (!document.getElementById('axios-script')) {
             js = document.createElement('script');
             js.id = 'axios-script';
-            js.setAttribute('defer', '');
+            // js.setAttribute('defer', '');
             js.src = '//cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js';
             fjs.parentNode.insertBefore(js, fjs);
         }
@@ -45,7 +45,7 @@ var Nognog = (function (window, document) {
         if (!document.getElementById('jsrsasign-script')) {
             js = document.createElement('script');
             js.id = 'jsrsasign-script';
-            js.setAttribute('defer', '');
+            // js.setAttribute('defer', '');
             js.src = '//kjur.github.io/jsrsasign/jsrsasign-all-min.js';
             fjs.parentNode.insertBefore(js, fjs);
         }
@@ -56,7 +56,7 @@ var Nognog = (function (window, document) {
         if (!document.getElementById('fg-script')) {
             js = document.createElement('script');
             js.id = 'fg-script';
-            js.setAttribute('defer', '');
+            // js.setAttribute('defer', '');
             js.src = '//cdn.jsdelivr.net/npm/fingerprintjs2@2.1.0/dist/fingerprint2.min.js';
             fjs.parentNode.insertBefore(js, fjs);
         }
@@ -240,7 +240,7 @@ var Nognog = (function (window, document) {
 
         return response && response.status === 200;
     };
-    includeLibs();
+    // includeLibs();
     return {
         config: null,
         init,
